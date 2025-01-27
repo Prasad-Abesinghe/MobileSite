@@ -1,9 +1,17 @@
-import React from "react";
+"use client";
+import React, { use } from "react";
 import { Button } from "@/components/ui/button";
+import { Link } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const Hero = () => {
+  const router = useRouter();
+
+  const goToAboutPage = () => {
+    router.push("/about");
+  };
   return (
-    <div className="flex flex-col items-center mt-6 lg:mt-20 z-50">
+    <div className="flex flex-col items-center mt-6 lg:mt-20 z-1000">
       <h1 className="text-4xl text-black sm:text-6xl font-bold lg:text-7xl text-center tracking-wide">
         Buy a Good Mobile Phones
         <span className=" bg-gradient-to-r from-orange-500 to-red-800 text-transparent bg-clip-text">
@@ -17,8 +25,11 @@ const Hero = () => {
         sapiente commodi ullam atque amet blanditiis libero dolorum, perferendis
         aut voluptates repellat.
       </p>
-      <div className="flex justify-center gap-4 my-10">
-        <Button variant="outline">Shop Nov</Button>
+      <div className="flex justify-center gap-4 my-10 z-1000">
+        <Button onClick={() => router.push("/all-phones")} variant="outline">
+          Shop Nov
+        </Button>
+
         <Button variant="destructive" className=" bg-orange-800">
           Documentaion
         </Button>

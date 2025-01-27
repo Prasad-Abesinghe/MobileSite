@@ -9,12 +9,12 @@ import Phones from "../home/Phones";
 
 export const BackgroundCellAnimation = () => {
   return (
-    <div className="relative w-full px-20  min-h-screen bg-slate-50 flex justify-center overflow-hidden">
+    <div className=" w-full px-20  min-h-screen bg-slate-50 flex justify-center overflow-hidden">
       <BackgroundCellCore />
       <div className="relative z-40 mt-20 mx-auto w-[90vw] pointer-events-none">
         <Hero />
         <FavMobiles />
-        <Phones/>
+        <Phones />
       </div>
     </div>
   );
@@ -43,7 +43,7 @@ const BackgroundCellCore = () => {
       <div className="absolute h-screen inset-y-0  overflow-hidden">
         <div className="absolute h-full w-full pointer-events-none -bottom-2 z-40 bg-slate-50 [mask-image:linear-gradient(to_bottom,transparent,black)]"></div>
         <div
-          className="absolute inset-0 z-20 bg-transparent"
+          className="absolute inset-0 bg-transparent"
           style={{
             maskImage: `radial-gradient(
             ${size / 4}px circle at center,
