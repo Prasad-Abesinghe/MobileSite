@@ -5,6 +5,7 @@ import { motion, useAnimation } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Hero from "../home/Hero";
 import FavMobiles from "../home/FavMobiles";
+import Phones from "../home/Phones";
 
 export const BackgroundCellAnimation = () => {
   return (
@@ -13,6 +14,7 @@ export const BackgroundCellAnimation = () => {
       <div className="relative z-40 mt-20 mx-auto w-[90vw] pointer-events-none">
         <Hero />
         <FavMobiles />
+        <Phones/>
       </div>
     </div>
   );
