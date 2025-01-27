@@ -4,15 +4,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Hero from "../home/Hero";
-import NavBar from "../NavBar";
-import NavBar2 from "../NavBar2";
 import FavMobiles from "../home/FavMobiles";
 
 export const BackgroundCellAnimation = () => {
   return (
-    <div className="relative  min-h-screen bg-slate-950 flex justify-center overflow-hidden">
+    <div className="relative w-full px-20  min-h-screen bg-slate-50 flex justify-center overflow-hidden">
       <BackgroundCellCore />
-      <div className="relative z-40 mt-20 pointer-events-none mx-20">
+      <div className="relative z-40 mt-20 mx-auto w-[90vw] pointer-events-none">
         <Hero />
         <FavMobiles />
       </div>
@@ -41,7 +39,7 @@ const BackgroundCellCore = () => {
       className="h-full absolute inset-0 mt-15"
     >
       <div className="absolute h-screen inset-y-0  overflow-hidden">
-        <div className="absolute h-full w-full pointer-events-none -bottom-2 z-40 bg-slate-950 [mask-image:linear-gradient(to_bottom,transparent,black)]"></div>
+        <div className="absolute h-full w-full pointer-events-none -bottom-2 z-40 bg-slate-50 [mask-image:linear-gradient(to_bottom,transparent,black)]"></div>
         <div
           className="absolute inset-0 z-20 bg-transparent"
           style={{

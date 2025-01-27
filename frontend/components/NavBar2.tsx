@@ -13,9 +13,9 @@ import {
 
 const NavBar2 = () => {
   return (
-    <div className=" px-20 fixed w-screen  bg-slate-950 flex py-5 justify-between items-center border-b-2">
+    <div className=" px-20 fixed w-screen  bg-slate-50 flex py-5 justify-between items-center border-b-2">
       <div>
-        <h2 className=" text-white text-4xl flex font-bold "><FaMobile/> <span className=" text-orange-700">M</span>obiles</h2>
+        <h2 className=" text-black text-4xl flex font-bold "><FaMobile/> <span className=" text-orange-700">M</span>obiles</h2>
       </div>
       <div className="hidden md:flex">
         <input
@@ -23,15 +23,15 @@ const NavBar2 = () => {
           name="search"
           id="search"
           placeholder="search a phone"
-          className=" py-2 px-20 text-black  rounded-l-lg border-black"
+          className=" py-2 px-20 text-black border  rounded-lg border-black"
         />
         
         <Button variant="destructive">Search</Button>
       </div>
       <div>
         <div className=" flex justify-between items-center gap-2">
-          <FaCartShopping className=" text-2xl text-white" />
-          <div className=" text-white flex flex-col justify-center items-center">
+          <FaCartShopping className=" text-2xl text-bllack" />
+          <div className=" text-black flex flex-col justify-center items-center">
             <div>Your Cart</div>
             <div>10$</div>
           </div>

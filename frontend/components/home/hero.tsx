@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 
 const Hero = () => {
   return (
-    <div className="flex w-screen flex-col items-center mt-6 lg:mt-20 z-50">
-      <h1 className="text-4xl text-white sm:text-6xl font-bold lg:text-7xl text-center tracking-wide">
+    <div className="flex flex-col items-center mt-6 lg:mt-20 z-50">
+      <h1 className="text-4xl text-black sm:text-6xl font-bold lg:text-7xl text-center tracking-wide">
         Buy a Good Mobile Phones
         <span className=" bg-gradient-to-r from-orange-500 to-red-800 text-transparent bg-clip-text">
           {" "}
@@ -29,7 +29,7 @@ const Hero = () => {
           autoPlay
           loop
           muted
-          className=" rounded-lg w-1/2 border border-orange-700 shadow-orange-400 mx-2 my-4"
+          className=" rounded-lg w-2/5 border border-orange-700 shadow-orange-400 mx-2 my-4"
         >
           Your browser does not support the video tag.
         </video>
@@ -38,7 +38,7 @@ const Hero = () => {
           autoPlay
           loop
           muted
-          className=" rounded-lg w-1/2 border border-orange-700 shadow-orange-400 mx-2 my-4"
+          className=" rounded-lg w-2/5 border border-orange-700 shadow-orange-400 mx-2 my-4"
         >
           Your browser does not support the video tag.
         </video>

@@ -56,7 +56,7 @@ const components: { title: string; href: string; description: string }[] = [
 ];
 const NavBar = () => {
   return (
-    <div className=" w-screen flex py-1 bg-slate-950  items-center justify-center z-50 px-20">
+    <div className=" w-screen flex py-1 bg-slate-50 text-black  items-center justify-center z-50 px-20">
       <div className=" flex w-full items-center justify-between">
         <div className=" flex items-center justify-between gap-2">
           <NavigationMenu>
@@ -86,11 +86,11 @@ const NavBar = () => {
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
-          <div className=" text-white">Fast Returning Program |</div>
-          <div className=" text-white">No Additional Fee |</div>
+          <div className=" text-black">Fast Returning Program |</div>
+          <div className=" text-black">No Additional Fee |</div>
         </div>
         <div>
-          <Link href="" className=" text-white flex justify-between items-center gap-2"><FaUser className=" text-white"/> Register or Signin</Link>
+          <Link href="" className=" text-black flex justify-between items-center gap-2"><FaUser className=" text-black"/> Register or Signin</Link>
         </div>
       </div>
     </div>

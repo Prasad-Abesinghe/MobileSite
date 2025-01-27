@@ -1,5 +1,3 @@
-import FavMobiles from "@/components/home/FavMobiles";
-import Hero from "@/components/home/Hero";
 import NavBar from "@/components/NavBar";
 import NavBar2 from "@/components/NavBar2";
 import { BackgroundCellAnimation } from "@/components/ui/BackgroundRippleEffect";
@@ -12,7 +10,9 @@ export default function Home() {
         <NavBar />
         <NavBar2 />
       </div>
-      <BackgroundCellAnimation />
+      <div className=" mx-auto w-full h-full  ">
+        <BackgroundCellAnimation />
+      </div>
     </div>
   );
 }
