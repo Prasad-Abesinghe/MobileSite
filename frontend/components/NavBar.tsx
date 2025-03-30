@@ -14,106 +14,126 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { Button } from "./ui/button";
-import { FaUser } from "react-icons/fa6";
-import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Smartphone } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { ModeToggle } from "./ModeToggle";
+import { ShoppingCart, Menu, X, User } from "lucide-react";
+import { useState } from "react";
+import { useCart } from "@/hooks/useCart";
+import { CartPopup } from "./CartPopup";
 
-const components: { title: string; href: string; description: string }[] = [
-  {
-    title: "Samsung",
-    href: "/docs/primitives/alert-dialog",
-    description:
-      "A modal dialog that interrupts the user with important content and expects a response.",
-  },
-  {
-    title: "Apple",
-    href: "/docs/primitives/hover-card",
-    description:
-      "For sighted users to preview content available behind a link.",
-  },
-  {
-    title: "Huawei",
-    href: "/docs/primitives/progress",
-    description:
-      "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
-  },
-  {
-    title: "Xiaomi",
-    href: "/docs/primitives/scroll-area",
-    description: "Visually or semantically separates content.",
-  },
-  {
-    title: "Sony",
-    href: "/docs/primitives/tabs",
-    description:
-      "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
-  },
-  {
-    title: "Google Pxel",
-    href: "/docs/primitives/tooltip",
-    description:
-      "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
-  },
-];
-const NavBar = () => {
-  const { theme, setTheme } = useTheme();
+export function NavBar() {
+  const { setTheme, theme } = useTheme();
+  const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { cartItems } = useCart();
+
+  const isActive = (path: string) => pathname === path;
+
+  const navItems = [
+    { name: "Home", path: "/" },
+    { name: "All Phones", path: "/all-phones" },
+    { name: "Brands", path: "/brands" },
+    { name: "About", path: "/about" },
+    { name: "Contact", path: "/contact" },
+  ];
 
   return (
-    <div className="w-screen flex py-1 bg-slate-50 dark:bg-slate-900 text-black dark:text-white items-center justify-center z-50 px-20">
-      <div className="flex w-full items-center justify-between">
-        <div className="flex items-center justify-between gap-2">
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Moble Brands</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                    {components.map((component) => (
-                      <ListItem
-                        key={component.title}
-                        title={component.title}
-                        href={component.href}
-                      >
-                        {component.description}
-                      </ListItem>
-                    ))}
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link href="/all-phones" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Shop Now
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-          <div className="text-black dark:text-white">
-            Fast Returning Program |
-          </div>
-          <div className="text-black dark:text-white">No Additional Fee |</div>
-        </div>
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="p-2 rounded-lg bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors"
-          >
-            {theme === "dark" ? "🌞" : "🌙"}
-          </button>
+    <>
+      <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
+        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <Link
-            href="/login"
-            className="text-black dark:text-white flex justify-between items-center gap-2 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+            href="/"
+            className="flex items-center space-x-3 rtl:space-x-reverse"
           >
-            <FaUser className="text-black dark:text-white" /> Register or Signin
+            <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+              MobileHub
+            </span>
           </Link>
+          <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="relative text-gray-900 dark:text-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+            >
+              <ShoppingCart className="h-6 w-6" />
+              {cartItems.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartItems.length}
+                </span>
+              )}
+            </button>
+            <ModeToggle />
+            <div className="hidden md:flex items-center space-x-2">
+              <Link href="/auth/login">
+                <Button variant="ghost" size="sm">
+                  <User className="h-4 w-4 mr-2" />
+                  Login
+                </Button>
+              </Link>
+              <Link href="/auth/signup">
+                <Button size="sm">Sign Up</Button>
+              </Link>
+            </div>
+            <button
+              data-collapse-toggle="navbar-sticky"
+              type="button"
+              className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              aria-controls="navbar-sticky"
+              aria-expanded="false"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <span className="sr-only">Open main menu</span>
+              {isMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
+          </div>
+          <div
+            className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${
+              isMenuOpen ? "block" : "hidden"
+            }`}
+            id="navbar-sticky"
+          >
+            <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+              {navItems.map((item) => (
+                <li key={item.path}>
+                  <Link
+                    href={item.path}
+                    className={`block py-2 px-3 rounded md:p-0 ${
+                      isActive(item.path)
+                        ? "text-blue-700 dark:text-blue-500"
+                        : "text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div className="md:hidden p-4 border-t">
+              <div className="flex flex-col space-y-2">
+                <Link href="/auth/login">
+                  <Button variant="ghost" className="w-full">
+                    <User className="h-4 w-4 mr-2" />
+                    Login
+                  </Button>
+                </Link>
+                <Link href="/auth/signup">
+                  <Button className="w-full">Sign Up</Button>
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </nav>
+      <CartPopup isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+    </>
   );
-};
-
-export default NavBar;
+}
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a">
