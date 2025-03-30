@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-
+import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import {
@@ -56,16 +56,18 @@ const components: { title: string; href: string; description: string }[] = [
   },
 ];
 const NavBar = () => {
+  const { theme, setTheme } = useTheme();
+
   return (
-    <div className=" w-screen flex py-1 bg-slate-50 text-black  items-center justify-center z-50 px-20">
-      <div className=" flex w-full items-center justify-between">
-        <div className=" flex items-center justify-between gap-2">
+    <div className="w-screen flex py-1 bg-slate-50 dark:bg-slate-900 text-black dark:text-white items-center justify-center z-50 px-20">
+      <div className="flex w-full items-center justify-between">
+        <div className="flex items-center justify-between gap-2">
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
                 <NavigationMenuTrigger>Moble Brands</NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                     {components.map((component) => (
                       <ListItem
                         key={component.title}
@@ -87,15 +89,23 @@ const NavBar = () => {
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
-          <div className=" text-black">Fast Returning Program |</div>
-          <div className=" text-black">No Additional Fee |</div>
+          <div className="text-black dark:text-white">
+            Fast Returning Program |
+          </div>
+          <div className="text-black dark:text-white">No Additional Fee |</div>
         </div>
-        <div>
-          <Link
-            href=""
-            className=" text-black flex justify-between items-center gap-2"
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="p-2 rounded-lg bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors"
           >
-            <FaUser className=" text-black" /> Register or Signin
+            {theme === "dark" ? "🌞" : "🌙"}
+          </button>
+          <Link
+            href="/login"
+            className="text-black dark:text-white flex justify-between items-center gap-2 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+          >
+            <FaUser className="text-black dark:text-white" /> Register or Signin
           </Link>
         </div>
       </div>

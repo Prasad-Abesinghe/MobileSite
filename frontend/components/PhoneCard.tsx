@@ -2,58 +2,63 @@ import React from "react";
 import Image from "next/image";
 import { Button } from "./ui/button";
 
-interface PhoneCard {
-  Title: "Galaxy S22 Ultra";
-  Description: any;
-  Price: "564$";
-  MainImage: string;
-  Brand: "Samsung";
-  onClick: any;
+interface PhoneSpecs {
+  ram: string;
+  storage: string;
+  battery: string;
 }
 
-const PhoneCard = ({
-  Title,
-  Description,
-  Price,
-  MainImage,
-  Brand,
-  onClick,
-}: PhoneCard) => {
+interface Phone {
+  id: number;
+  name: string;
+  brand: string;
+  price: number;
+  image: string;
+  specs: PhoneSpecs;
+}
+
+interface PhoneCardProps {
+  phone: Phone;
+}
+
+export default function PhoneCard({ phone }: PhoneCardProps) {
   return (
-    <div
-      onClick={onClick}
-      className="border-silver-1 border text-black w-[350px] rounded-lg flex-col cursor-pointer hover:scale-105 transition relative"
-    >
-      <div
-        className={`flex-1 w-full h-[150px] bg-slate-500 rounded-t-lg bg-contain bg-center ${MainImage}`}
-      >
-        {/* <div className="">
-          <Image
-            src={MainImage}
-            layout="fill"
-            className="object-cover"
-            alt="product photo"
-          />
-        </div> */}
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+      <div className="relative h-48 w-full">
+        <Image
+          src={phone.image}
+          alt={phone.name}
+          fill
+          className="object-contain p-4"
+        />
       </div>
-      <div className="flex-1 p-2 flex flex-col ">
-        <div className="flex items-center gap-2 mb-1">
-          <p className="font-semibold">Galaxy S22 Ultra</p>
+      <div className="p-4">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          {phone.name}
+        </h3>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          {phone.brand}
+        </p>
+        <div className="mt-2 space-y-1">
+          <p className="text-sm text-gray-600 dark:text-gray-300">
+            RAM: {phone.specs.ram}
+          </p>
+          <p className="text-sm text-gray-600 dark:text-gray-300">
+            Storage: {phone.specs.storage}
+          </p>
+          <p className="text-sm text-gray-600 dark:text-gray-300">
+            Battery: {phone.specs.battery}
+          </p>
         </div>
-        <div className="text-sm mb-3">
-          The Samsung Galaxy S22 Ultra offers a 6.8-inch AMOLED display, 108MP
-          camera, S Pen, powerful performance, and sleek, durable design.
-        </div>
-        <div className="flex justify-between items-center">
-          <div>
-            <p className="font-base">Samsung</p>
-            <p className="font-semibold">Rs. 546$ /=</p>
-          </div>
-          <Button>See More</Button>
+        <div className="mt-4 flex justify-between items-center">
+          <p className="text-xl font-bold text-orange-600">
+            Rs. {phone.price.toLocaleString()}
+          </p>
+          <Button className="bg-orange-600 hover:bg-orange-700 text-white">
+            Add to Cart
+          </Button>
         </div>
       </div>
     </div>
   );
-};
-
-export default PhoneCard;
+}
