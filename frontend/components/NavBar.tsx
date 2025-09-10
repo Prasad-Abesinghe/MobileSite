@@ -31,6 +31,7 @@ export function NavBar() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { cartItems } = useCart();
   const { token, userName, userEmail, logout } = useAuth();
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const isActive = (path: string) => pathname === path;
 
@@ -83,8 +84,11 @@ export function NavBar() {
                   </Link>
                 </>
               ) : (
-                <div className="relative group">
-                  <button className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+                <div className="relative">
+                  <button
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                    onClick={() => setIsProfileOpen((v) => !v)}
+                  >
                     <div className="h-8 w-8 rounded-full bg-orange-600 text-white flex items-center justify-center text-sm font-semibold">
                       {initials || "U"}
                     </div>
@@ -92,28 +96,32 @@ export function NavBar() {
                       {userName || userEmail}
                     </span>
                   </button>
-                  <div className="absolute right-0 mt-2 w-44 rounded-md border bg-white dark:bg-gray-900 shadow-lg hidden group-hover:block">
-                    <Link
-                      href="/profile"
-                      className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
-                    >
-                      Profile
-                    </Link>
-                    <button
-                      className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
-                      onClick={() => {
-                        logout();
-                        if (typeof window !== "undefined") {
-                          localStorage.removeItem("auth_token");
-                          localStorage.removeItem("user_name");
-                          localStorage.removeItem("user_email");
-                        }
-                        window.location.href = "/";
-                      }}
-                    >
-                      Logout
-                    </button>
-                  </div>
+                  {isProfileOpen && (
+                    <div className="absolute right-0 mt-2 w-44 rounded-md border bg-white dark:bg-gray-900 shadow-lg">
+                      <Link
+                        href="/profile"
+                        className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
+                        onClick={() => setIsProfileOpen(false)}
+                      >
+                        View my profile
+                      </Link>
+                      <button
+                        className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
+                        onClick={() => {
+                          setIsProfileOpen(false);
+                          logout();
+                          if (typeof window !== "undefined") {
+                            localStorage.removeItem("auth_token");
+                            localStorage.removeItem("user_name");
+                            localStorage.removeItem("user_email");
+                          }
+                          window.location.href = "/";
+                        }}
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

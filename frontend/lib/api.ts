@@ -24,6 +24,28 @@ export const api = {
     return response.json();
   },
 
+  getProfile: async (token: string) => {
+    const response = await fetch(`${API_URL}/users/profile`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.json();
+  },
+
+  updateProfile: async (
+    token: string,
+    payload: { name?: string; email?: string; phone?: string; address?: string }
+  ) => {
+    const response = await fetch(`${API_URL}/users/profile`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+    return response.json();
+  },
+
   // Products
   getProducts: async (params?: {
     category?: string;
