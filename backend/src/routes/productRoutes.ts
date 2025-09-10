@@ -6,6 +6,7 @@ import {
   updateProduct,
   deleteProduct,
   updateStock,
+  seedSampleProducts,
 } from "../controllers/productController";
 import { protect, admin } from "../middleware/auth";
 
@@ -15,6 +16,7 @@ router.get("/", getProducts);
 router.get("/:id", getProductById);
 
 // Admin routes
+router.post("/seed", protect, admin, seedSampleProducts);
 router.post("/", protect, admin, createProduct);
 router.put("/:id", protect, admin, updateProduct);
 router.delete("/:id", protect, admin, deleteProduct);

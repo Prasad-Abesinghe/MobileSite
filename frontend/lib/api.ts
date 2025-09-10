@@ -101,6 +101,30 @@ export const api = {
     return response.json();
   },
 
+  createProduct: async (
+    token: string,
+    payload: {
+      name: string;
+      brand: string;
+      description: string;
+      price: number;
+      category: string;
+      stock: number;
+      images: string[];
+      specifications: Record<string, string>;
+    }
+  ) => {
+    const response = await fetch(`${API_URL}/products`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+    return response.json();
+  },
+
   // Orders
   createOrder: async (orderData: any, token: string) => {
     const response = await fetch(`${API_URL}/orders`, {
