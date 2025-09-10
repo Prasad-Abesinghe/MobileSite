@@ -8,6 +8,40 @@ import { Label } from "@/components/ui/label";
 import { Icons } from "@/components/icons";
 
 export default function LoginPage() {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setErrorMessage(null);
+    setIsSubmitting(true);
+    try {
+      const res = await (await import("@/lib/api")).api.login(email, password);
+      if (res && res.token) {
+        const { useAuth } = await import("@/hooks/useAuth");
+        useAuth.getState().setAuth({
+          token: res.token,
+          userName: res.name ?? null,
+          userEmail: res.email ?? email,
+        });
+        if (typeof window !== "undefined") {
+          localStorage.setItem("auth_token", res.token);
+          localStorage.setItem("user_name", res.name ?? "");
+          localStorage.setItem("user_email", res.email ?? email);
+        }
+        window.location.href = "/";
+      } else {
+        setErrorMessage(res?.message || "Login failed. Please try again.");
+      }
+    } catch (err) {
+      setErrorMessage("Network error. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="container relative min-h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
@@ -49,7 +83,7 @@ export default function LoginPage() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="grid gap-6"
           >
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="grid gap-4">
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
@@ -60,6 +94,9 @@ export default function LoginPage() {
                     autoCapitalize="none"
                     autoComplete="email"
                     autoCorrect="off"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
                   />
                 </div>
                 <div className="grid gap-2">
@@ -70,11 +107,19 @@ export default function LoginPage() {
                     autoCapitalize="none"
                     autoComplete="current-password"
                     autoCorrect="off"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
                   />
                 </div>
-                <Button>
-                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                  Sign In
+                {errorMessage && (
+                  <p className="text-sm text-red-600">{errorMessage}</p>
+                )}
+                <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                  ) : null}
+                  {isSubmitting ? "Signing In..." : "Sign In"}
                 </Button>
               </div>
             </form>

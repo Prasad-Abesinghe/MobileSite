@@ -22,6 +22,7 @@ import { ShoppingCart, Menu, X, User } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/hooks/useCart";
 import { CartPopup } from "./CartPopup";
+import { useAuth } from "@/hooks/useAuth";
 
 export function NavBar() {
   const { setTheme, theme } = useTheme();
@@ -29,6 +30,7 @@ export function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { cartItems } = useCart();
+  const { token, userName, userEmail, logout } = useAuth();
 
   const isActive = (path: string) => pathname === path;
 
@@ -39,6 +41,8 @@ export function NavBar() {
     { name: "About", path: "/about" },
     { name: "Contact", path: "/contact" },
   ];
+
+  const initials = (userName || userEmail || "").trim().charAt(0).toUpperCase();
 
   return (
     <>
@@ -66,15 +70,52 @@ export function NavBar() {
             </button>
             <ModeToggle />
             <div className="hidden md:flex items-center space-x-2">
-              <Link href="/auth/login">
-                <Button variant="ghost" size="sm">
-                  <User className="h-4 w-4 mr-2" />
-                  Login
-                </Button>
-              </Link>
-              <Link href="/auth/signup">
-                <Button size="sm">Sign Up</Button>
-              </Link>
+              {!token ? (
+                <>
+                  <Link href="/auth/login">
+                    <Button variant="ghost" size="sm">
+                      <User className="h-4 w-4 mr-2" />
+                      Login
+                    </Button>
+                  </Link>
+                  <Link href="/auth/signup">
+                    <Button size="sm">Sign Up</Button>
+                  </Link>
+                </>
+              ) : (
+                <div className="relative group">
+                  <button className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+                    <div className="h-8 w-8 rounded-full bg-orange-600 text-white flex items-center justify-center text-sm font-semibold">
+                      {initials || "U"}
+                    </div>
+                    <span className="text-sm hidden lg:block">
+                      {userName || userEmail}
+                    </span>
+                  </button>
+                  <div className="absolute right-0 mt-2 w-44 rounded-md border bg-white dark:bg-gray-900 shadow-lg hidden group-hover:block">
+                    <Link
+                      href="/profile"
+                      className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
+                      Profile
+                    </Link>
+                    <button
+                      className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
+                      onClick={() => {
+                        logout();
+                        if (typeof window !== "undefined") {
+                          localStorage.removeItem("auth_token");
+                          localStorage.removeItem("user_name");
+                          localStorage.removeItem("user_email");
+                        }
+                        window.location.href = "/";
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
             <button
               data-collapse-toggle="navbar-sticky"
@@ -116,15 +157,41 @@ export function NavBar() {
             </ul>
             <div className="md:hidden p-4 border-t">
               <div className="flex flex-col space-y-2">
-                <Link href="/auth/login">
-                  <Button variant="ghost" className="w-full">
-                    <User className="h-4 w-4 mr-2" />
-                    Login
-                  </Button>
-                </Link>
-                <Link href="/auth/signup">
-                  <Button className="w-full">Sign Up</Button>
-                </Link>
+                {!token ? (
+                  <>
+                    <Link href="/auth/login">
+                      <Button variant="ghost" className="w-full">
+                        <User className="h-4 w-4 mr-2" />
+                        Login
+                      </Button>
+                    </Link>
+                    <Link href="/auth/signup">
+                      <Button className="w-full">Sign Up</Button>
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/profile">
+                      <Button variant="ghost" className="w-full">
+                        Profile
+                      </Button>
+                    </Link>
+                    <Button
+                      className="w-full"
+                      onClick={() => {
+                        logout();
+                        if (typeof window !== "undefined") {
+                          localStorage.removeItem("auth_token");
+                          localStorage.removeItem("user_name");
+                          localStorage.removeItem("user_email");
+                        }
+                        window.location.href = "/";
+                      }}
+                    >
+                      Logout
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>
