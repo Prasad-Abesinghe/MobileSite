@@ -101,3 +101,76 @@ export const updateUserProfile = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+// Admin: list users
+export const getUsers = async (req: Request, res: Response) => {
+  try {
+    const { search } = req.query as { search?: string };
+    const query: any = {};
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+      ];
+    }
+    const users = await User.find(query).select("name email role createdAt");
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Admin: create user
+export const createUser = async (req: Request, res: Response) => {
+  try {
+    const { name, email, password, role } = req.body as {
+      name: string;
+      email: string;
+      password: string;
+      role?: string;
+    };
+
+    if (!name || !email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Name, email and password are required" });
+    }
+
+    const exists = await User.findOne({ email });
+    if (exists) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    const user = await User.create({
+      name,
+      email,
+      password,
+      role: role === "admin" ? "admin" : "user",
+    });
+    res
+      .status(201)
+      .json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        createdAt: user.createdAt,
+      });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Admin: delete user
+export const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    await user.deleteOne();
+    res.json({ message: "User deleted" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};

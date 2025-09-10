@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   Package,
@@ -14,38 +14,15 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth, useIsAdmin } from "@/hooks/useAuth";
 
 const sidebarItems = [
-  {
-    title: "Dashboard",
-    href: "/admin",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Products",
-    href: "/admin/products",
-    icon: Package,
-  },
-  {
-    title: "Orders",
-    href: "/admin/orders",
-    icon: ShoppingCart,
-  },
-  {
-    title: "Customers",
-    href: "/admin/customers",
-    icon: Users,
-  },
-  {
-    title: "Analytics",
-    href: "/admin/analytics",
-    icon: BarChart,
-  },
-  {
-    title: "Settings",
-    href: "/admin/settings",
-    icon: Settings,
-  },
+  { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { title: "Products", href: "/admin/products", icon: Package },
+  { title: "Orders", href: "/admin/orders", icon: ShoppingCart },
+  { title: "Customers", href: "/admin/customers", icon: Users },
+  { title: "Analytics", href: "/admin/analytics", icon: BarChart },
+  { title: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
 export default function AdminLayout({
@@ -54,7 +31,18 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(true);
+  const isAdmin = useIsAdmin();
+  const { userName, logout } = useAuth();
+
+  React.useEffect(() => {
+    if (!isAdmin) {
+      router.replace("/");
+    }
+  }, [isAdmin, router]);
+
+  if (!isAdmin) return null;
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -92,7 +80,19 @@ export default function AdminLayout({
               <span>{item.title}</span>
             </Link>
           ))}
-          <button className="flex items-center space-x-3 px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200 w-full">
+          <button
+            className="flex items-center space-x-3 px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200 w-full"
+            onClick={() => {
+              logout();
+              if (typeof window !== "undefined") {
+                localStorage.removeItem("auth_token");
+                localStorage.removeItem("user_name");
+                localStorage.removeItem("user_email");
+                localStorage.removeItem("user_role");
+              }
+              router.replace("/");
+            }}
+          >
             <LogOut className="w-5 h-5" />
             <span>Logout</span>
           </button>
@@ -117,12 +117,12 @@ export default function AdminLayout({
           <div className="flex items-center space-x-4">
             <div className="relative">
               <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-white">
-                A
+                {(userName || "A").charAt(0).toUpperCase()}
               </div>
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
             </div>
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Admin User
+              {userName || "Admin User"}
             </span>
           </div>
         </div>

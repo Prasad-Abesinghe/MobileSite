@@ -30,7 +30,7 @@ export function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { cartItems } = useCart();
-  const { token, userName, userEmail, logout } = useAuth();
+  const { token, userName, userEmail, logout, role } = useAuth();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const isActive = (path: string) => pathname === path;
@@ -162,6 +162,20 @@ export function NavBar() {
                   </Link>
                 </li>
               ))}
+              {role === "admin" && (
+                <li>
+                  <Link
+                    href="/admin"
+                    className={`block py-2 px-3 rounded md:p-0 ${
+                      isActive("/admin")
+                        ? "text-blue-700 dark:text-blue-500"
+                        : "text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                    }`}
+                  >
+                    Admin
+                  </Link>
+                </li>
+              )}
             </ul>
             <div className="md:hidden p-4 border-t">
               <div className="flex flex-col space-y-2">

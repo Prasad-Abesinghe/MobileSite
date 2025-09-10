@@ -46,6 +46,43 @@ export const api = {
     return response.json();
   },
 
+  // Admin - Users
+  listUsers: async (token: string, params?: { search?: string }) => {
+    const qs = params?.search
+      ? `?search=${encodeURIComponent(params.search)}`
+      : "";
+    const response = await fetch(`${API_URL}/users${qs}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.json();
+  },
+  createUser: async (
+    token: string,
+    payload: {
+      name: string;
+      email: string;
+      password: string;
+      role?: "user" | "admin";
+    }
+  ) => {
+    const response = await fetch(`${API_URL}/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+    return response.json();
+  },
+  deleteUser: async (token: string, id: string) => {
+    const response = await fetch(`${API_URL}/users/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.json();
+  },
+
   // Products
   getProducts: async (params?: {
     category?: string;

@@ -25,11 +25,13 @@ export default function LoginPage() {
           token: res.token,
           userName: res.name ?? null,
           userEmail: res.email ?? email,
+          role: (res.role as "user" | "admin") ?? null,
         });
         if (typeof window !== "undefined") {
           localStorage.setItem("auth_token", res.token);
           localStorage.setItem("user_name", res.name ?? "");
           localStorage.setItem("user_email", res.email ?? email);
+          if (res.role) localStorage.setItem("user_role", res.role);
         }
         window.location.href = "/";
       } else {
