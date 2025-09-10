@@ -13,9 +13,15 @@ interface CartPopupProps {
 }
 
 export function CartPopup({ isOpen, onClose }: CartPopupProps) {
-  const { cartItems, removeFromCart, clearCart } = useCart();
-
-  const total = cartItems.reduce((sum, item) => sum + item.price, 0);
+  const {
+    cartItems,
+    removeFromCart,
+    clearCart,
+    increment,
+    decrement,
+    totalPrice,
+  } = useCart();
+  const total = totalPrice();
 
   return (
     <AnimatePresence>
@@ -57,7 +63,7 @@ export function CartPopup({ isOpen, onClose }: CartPopupProps) {
                     <div className="space-y-4">
                       {cartItems.map((item, index) => (
                         <motion.div
-                          key={item.id}
+                          key={`${item.id}-${index}`}
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.1 }}
@@ -76,9 +82,29 @@ export function CartPopup({ isOpen, onClose }: CartPopupProps) {
                             <p className="text-sm text-gray-500 dark:text-gray-400">
                               {item.brand}
                             </p>
-                            <p className="text-blue-600 dark:text-blue-400 font-semibold">
-                              Rs. {item.price.toLocaleString()}
-                            </p>
+                            <div className="mt-1 flex items-center justify-between">
+                              <div className="inline-flex items-center gap-2">
+                                <button
+                                  className="h-6 w-6 rounded border px-1"
+                                  onClick={() => decrement(item.id)}
+                                  aria-label="Decrease"
+                                >
+                                  -
+                                </button>
+                                <span className="text-sm">{item.quantity}</span>
+                                <button
+                                  className="h-6 w-6 rounded border px-1"
+                                  onClick={() => increment(item.id)}
+                                  aria-label="Increase"
+                                >
+                                  +
+                                </button>
+                              </div>
+                              <p className="text-blue-600 dark:text-blue-400 font-semibold">
+                                Rs.{" "}
+                                {(item.price * item.quantity).toLocaleString()}
+                              </p>
+                            </div>
                           </div>
                           <button
                             onClick={() => removeFromCart(item.id)}

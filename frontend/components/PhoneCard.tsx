@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
+import { useCart } from "@/hooks/useCart";
 
 interface Phone {
   id: string;
@@ -26,6 +27,7 @@ interface PhoneCardProps {
 }
 
 export default function PhoneCard({ phone }: PhoneCardProps) {
+  const { addToCart } = useCart();
   return (
     <div className="group relative overflow-hidden rounded-lg border bg-background p-2 hover:shadow-lg transition-shadow">
       <div className="aspect-square overflow-hidden rounded-lg">
@@ -65,8 +67,19 @@ export default function PhoneCard({ phone }: PhoneCardProps) {
           <Button className="flex-1" asChild>
             <Link href={`/phones/${phone.id}`}>View Details</Link>
           </Button>
-          <Button variant="outline" size="icon">
-            <Icons.heart className="h-4 w-4" />
+          <Button
+            variant="outline"
+            onClick={() =>
+              addToCart({
+                id: phone.id,
+                name: phone.name,
+                brand: phone.brand,
+                price: phone.price,
+                image: phone.image,
+              })
+            }
+          >
+            Add to Cart
           </Button>
         </div>
       </div>

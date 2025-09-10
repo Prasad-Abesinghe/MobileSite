@@ -30,6 +30,7 @@ export function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { cartItems } = useCart();
+  const totalQty = useCart((s) => s.totalQuantity());
   const { token, userName, userEmail, logout, role } = useAuth();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
@@ -63,9 +64,9 @@ export function NavBar() {
               className="relative text-gray-900 dark:text-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:hover:bg-gray-700 dark:focus:ring-gray-800"
             >
               <ShoppingCart className="h-6 w-6" />
-              {cartItems.length > 0 && (
+              {totalQty > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {cartItems.length}
+                  {totalQty}
                 </span>
               )}
             </button>
